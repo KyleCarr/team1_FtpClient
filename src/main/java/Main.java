@@ -1,49 +1,66 @@
-import Config.JschConfig;
-import com.jcraft.jsch.ChannelSftp;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.SftpException;
+import com.jcraft.jsch.*;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 
 public class Main {
 
     private static final int BUFFER_SIZE = 4096;
-
+    private static final int SESSION_TIMEOUT = 10000;
+    private static final int CHANNEL_TIMEOUT = 5000;
     public static void main(String Args[]){
         String ftpUrl = "ftp://%s:%s@%s/%s;type=i";
         String host = "";
         String user = "";
         String pass = "";
-        String filePath = "";
-        String savePath = "";
+        String filePath = "/home/pi/Downloads/test.txt";
+        String savePath = "D:/temp/test.txt";
 
-        ftpUrl = String.format(ftpUrl, user, pass, host, filePath);
-        System.out.println("URL: " + ftpUrl);
+        Session jschSession = null;
 
         try {
-            URL url = new URL(ftpUrl);
-            URLConnection conn = url.openConnection();
 
-            InputStream inputStream = conn.getInputStream();
+            JSch jsch = new JSch();
 
-            FileOutputStream outputStream = new FileOutputStream(savePath);
+            jsch.setKnownHosts("C:/Users/kylec/.ssh/known_hosts");
+            jschSession = jsch.getSession(user, host, 22);
 
-            byte[] buffer = new byte[BUFFER_SIZE];
-            int bytesRead = -1;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
+            java.util.Properties config = new java.util.Properties();
+            config.put("StrictHostKeyChecking", "no");
+            jschSession.setConfig(config);
+            // authenticate using private key
+            //jsch.addIdentity("/home/mkyong/.ssh/id_rsa");
+
+            // authenticate using password
+            jschSession.setPassword(pass);
+
+            // 10 seconds session timeout
+            jschSession.connect(SESSION_TIMEOUT);
+
+            Channel sftp = jschSession.openChannel("sftp");
+
+            // 5 seconds timeout
+            sftp.connect(CHANNEL_TIMEOUT);
+
+            ChannelSftp channelSftp = (ChannelSftp) sftp;
+
+            // transfer file from local to remote server
+            //channelSftp.put(localFile, remoteFile);
+
+
+            // download file from remote server to local
+             channelSftp.get(filePath, savePath);
+
+            channelSftp.exit();
+
+        } catch (JSchException | SftpException e) {
+
+            e.printStackTrace();
+
+        } finally {
+            if (jschSession != null) {
+                jschSession.disconnect();
             }
-
-            outputStream.close();
-            inputStream.close();
-
-            System.out.println("File downloaded");
-        } catch (IOException ex) {
-            ex.printStackTrace();
         }
+
+        System.out.println("Done");
     }
 }
