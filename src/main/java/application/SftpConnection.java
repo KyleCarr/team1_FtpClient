@@ -9,12 +9,12 @@ import com.jcraft.jsch.SftpException;
 import java.util.Scanner;
 import java.util.Vector;
 
-public class RetrieveFromHost {
+public class SftpConnection {
 
     private static final int CHANNEL_TIMEOUT = 5000;
     Scanner input = new Scanner(System.in);
     JschConfig jschConfig = new JschConfig();
-    public void connect() throws JSchException, SftpException {
+    public ChannelSftp connect() throws JSchException, SftpException {
 
         System.out.println("Enter the remote host url");
         String remoteHost = input.nextLine();
@@ -25,19 +25,12 @@ public class RetrieveFromHost {
 
         Channel sftp = jschConfig.setupJsch(remoteHost,username,password);
         sftp.connect(CHANNEL_TIMEOUT);
-        ChannelSftp channelSftp = (ChannelSftp) sftp;
-
-        String filepath = "Downloads/test.txt"; //TODO: fix hardcoded variable. currently for testing functionality
-        String savePath = "D:/temp/testing.txt"; //TODO: fix hardcoded variable. currently for testing functionality
-        download(channelSftp,filepath,savePath);
-        listDirectory(channelSftp);
-        System.out.println("file transferred successfully");
-        channelSftp.exit();
+        return  (ChannelSftp) sftp;
 
     }
 
-    private void listDirectory(ChannelSftp channelSftp) throws SftpException {
-        Vector filelist = channelSftp.ls("Downloads"); //TODO: fix hardcoded variable. currently for testing functionality
+    public void listDirectory(ChannelSftp channelSftp, String path) throws SftpException {
+        Vector filelist = channelSftp.ls(path); //TODO: fix hardcoded variable. currently for testing functionality
         for(int i=0; i<filelist.size();i++){
             ChannelSftp.LsEntry entry = (ChannelSftp.LsEntry) filelist.get(i);
             if(!(entry.getFilename().equals(".") || entry.getFilename().equals(".."))){
@@ -50,4 +43,5 @@ public class RetrieveFromHost {
         channelSftp.get(filePath, savePath);
 
     }
+
 }
