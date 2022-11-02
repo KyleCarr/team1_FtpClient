@@ -17,7 +17,7 @@ public class Main {
             choice = input.nextInt();
             switch (choice) {
                 case 1:
-                    SftpConnection connection = new SftpConnection();
+                    WindowsSftpConnection connection = new WindowsSftpConnection();
                     ChannelSftp channelSftp = connection.connect();
                     connection.listDirectory(channelSftp,channelSftp.pwd());
 
