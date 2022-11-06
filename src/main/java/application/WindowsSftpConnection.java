@@ -12,7 +12,7 @@ import java.util.Vector;
 public class WindowsSftpConnection implements SftpConnection {
 
     Scanner input = new Scanner(System.in);
-    JschConfig jschConfig = new JschConfig();
+    JschConfig jschConfig = JschConfig.getInstance();
 
     @Override
     public ChannelSftp connect() throws JSchException, SftpException {
