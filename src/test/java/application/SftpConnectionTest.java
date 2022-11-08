@@ -1,11 +1,11 @@
 package application;
 
+import application.connection.EstablishedConnection;
+import application.connection.sftpconnection.SftpConnectionFactory;
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;

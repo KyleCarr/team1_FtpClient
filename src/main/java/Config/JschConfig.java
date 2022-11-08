@@ -18,8 +18,8 @@ public final class JschConfig {
     private static JschConfig INSTANCE;
     private final String userHomeDir = System.getProperty("user.home"); //move to SftpConnection
     private static final int SESSION_TIMEOUT = 10000;
-
-    public static JschConfig getInstance(){
+    private JschConfig(){}
+    public static synchronized JschConfig getInstance(){
         if(INSTANCE == null){
             INSTANCE = new JschConfig();
         }
@@ -32,9 +32,8 @@ public final class JschConfig {
         Session jschSession = jsch.getSession(username, remoteHost,22);
         jschSession.setPassword(password);
 
-        debug(jschSession);
+        //debug(jschSession);
 
-        //  jsch.getHostKeyRepository().add(jschSession.getHostKeyRepository().,null);
         jschSession.connect(SESSION_TIMEOUT);
         return (ChannelSftp) jschSession.openChannel("sftp");
     }
