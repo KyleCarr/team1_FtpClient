@@ -1,4 +1,6 @@
-package application;
+package application.connection;
+
+import application.DirectoryItem;
 
 import java.util.List;
 

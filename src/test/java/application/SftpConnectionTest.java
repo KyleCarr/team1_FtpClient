@@ -1,5 +1,7 @@
 package application;
 
+import application.connection.EstablishedConnection;
+import application.connection.sftpconnection.SftpConnectionFactory;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

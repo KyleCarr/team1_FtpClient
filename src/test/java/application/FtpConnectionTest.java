@@ -1,5 +1,7 @@
 package application;
 
+import application.connection.EstablishedConnection;
+import application.connection.ftpconnection.FtpConnectionFactory;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
