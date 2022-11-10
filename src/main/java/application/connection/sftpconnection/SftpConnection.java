@@ -50,7 +50,6 @@ public class SftpConnection extends EstablishedConnection {
             List<DirectoryItem> directoryItemList = new ArrayList<>();
             for (Iterator iterator = vector.iterator();iterator.hasNext();){
                 ChannelSftp.LsEntry lsEntry = (ChannelSftp.LsEntry) iterator.next();
-                System.out.println(lsEntry);
                 directoryItemList.add(new DirectoryItem(lsEntry));
             }
             return directoryItemList;

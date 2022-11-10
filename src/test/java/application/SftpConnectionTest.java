@@ -20,13 +20,13 @@ class SftpConnectionTest {
     private final String username = "demo";
     private final String password = "password";
 
-    private EstablishedConnection ftpConnection = new SftpConnectionFactory().connect(remoteHost, username, password);
+    private EstablishedConnection connection = new SftpConnectionFactory().connect(remoteHost, username, password);
 
     @Test
     void listDirectory() {
-        List<DirectoryItem> files = ftpConnection.listDirectory();
+        List<DirectoryItem> files = connection.listDirectory();
         assertTrue(files.size() > 0);
-        files.forEach(file->System.out.println(file));
+        files.forEach(item->System.out.println(item.getName()));
     }
 
     @Test
@@ -36,7 +36,7 @@ class SftpConnectionTest {
 
         try (InputStream inputStream = this.getClass().getResourceAsStream("/expected_readme.txt")){
             String expected = new String(inputStream.readAllBytes());
-            String actual = ftpConnection.getFile("readme.txt");
+            String actual = connection.getFile("readme.txt");
             assertEquals(expected,actual);
             Files.writeString(path, actual, StandardCharsets.UTF_8);
         }

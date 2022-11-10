@@ -14,11 +14,12 @@ class FtpConnectionTest {
     private final String username = "dlpuser";
     private final String password = "rNrKYTX9g7z3RgJRmxWuGHbeu";
 
-    private EstablishedConnection ftpConnection = new FtpConnectionFactory().connect(remoteHost,username,password);
+    private EstablishedConnection connection = new FtpConnectionFactory().connect(remoteHost,username,password);
 
     @Test
     void listDirectory() {
-        List<DirectoryItem> files = ftpConnection.listDirectory();
+        List<DirectoryItem> files = connection.listDirectory();
         assertTrue(files.size()>0);
+        files.forEach(item->System.out.println(item.getName()));
     }
 }
