@@ -1,5 +1,8 @@
 package application;
 
+import application.connection.ConnectionFactory;
+import application.connection.EstablishedConnection;
+import application.connection.ftpconnection.FtpConnectionFactory;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

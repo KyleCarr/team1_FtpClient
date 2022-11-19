@@ -1,12 +1,14 @@
-package application;
+package application.connection.sftpconnection;
 
 import Config.JschConfig;
+import application.connection.EstablishedConnection;
+import application.connection.ConnectionFactory;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSchException;
 
 public class SftpConnectionFactory implements ConnectionFactory {
 
-    private final JschConfig jschConfig = new JschConfig();
+    private final JschConfig jschConfig =  JschConfig.getInstance();
 
     @Override
     public EstablishedConnection connect(String remoteHost, String username, String password) {

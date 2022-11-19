@@ -1,5 +1,7 @@
-package application;
+package application.connection.ftpconnection;
 
+import application.DirectoryItem;
+import application.connection.EstablishedConnection;
 import exception.ClientConnectionException;
 
 import java.io.BufferedReader;
@@ -43,8 +45,6 @@ public class FtpConnection extends EstablishedConnection {
             for (String line; (line = reader.readLine()) != null;) {
                 DirectoryItem directoryItem = new DirectoryItem(line);
                 directoryItemList.add(directoryItem);
-                System.out.println(line);
-                System.out.println(directoryItem);
             }
         } catch (IOException e) {
             throw new ClientConnectionException(e.getMessage(),e);

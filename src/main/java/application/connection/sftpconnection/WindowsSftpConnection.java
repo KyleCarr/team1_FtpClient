@@ -1,4 +1,4 @@
-package application;
+package application.connection.sftpconnection;
 
 import Config.JschConfig;
 import com.jcraft.jsch.ChannelSftp;

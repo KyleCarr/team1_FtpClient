@@ -1,5 +1,7 @@
-package application;
+package application.connection.ftpconnection;
 
+import application.connection.ConnectionFactory;
+import application.connection.EstablishedConnection;
 import exception.ClientConnectionException;
 
 import java.io.IOException;

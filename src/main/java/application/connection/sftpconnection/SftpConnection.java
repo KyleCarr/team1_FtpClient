@@ -1,5 +1,7 @@
-package application;
+package application.connection.sftpconnection;
 
+import application.DirectoryItem;
+import application.connection.EstablishedConnection;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.SftpException;
 import exception.ClientConnectionException;
@@ -9,12 +11,10 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
-import java.util.stream.Collectors;
 
 import static java.lang.Math.min;
 
@@ -50,7 +50,6 @@ public class SftpConnection extends EstablishedConnection {
             List<DirectoryItem> directoryItemList = new ArrayList<>();
             for (Iterator iterator = vector.iterator();iterator.hasNext();){
                 ChannelSftp.LsEntry lsEntry = (ChannelSftp.LsEntry) iterator.next();
-                System.out.println(lsEntry);
                 directoryItemList.add(new DirectoryItem(lsEntry));
             }
             return directoryItemList;

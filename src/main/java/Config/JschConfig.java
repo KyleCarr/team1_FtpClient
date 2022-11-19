@@ -1,36 +1,42 @@
 package Config;
 
-import com.jcraft.jsch.ChannelSftp;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.Session;
+import com.jcraft.jsch.*;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.Scanner;
+import java.util.function.Predicate;
 
-public class JschConfig {
+public final class JschConfig {
 
-    private final String userHomeDir = System.getProperty("user.home");
+    private static JschConfig INSTANCE;
+    private final String userHomeDir = System.getProperty("user.home"); //move to SftpConnection
     private static final int SESSION_TIMEOUT = 10000;
+    private JschConfig(){}
+    public static synchronized JschConfig getInstance(){
+        if(INSTANCE == null){
+            INSTANCE = new JschConfig();
+        }
+        return INSTANCE;
+    }
     public ChannelSftp setupJsch(String remoteHost, String username, String password) throws JSchException {
         JSch jsch = new JSch();
-        jsch.setKnownHosts(userHomeDir.replace('\\','/') + "/.ssh/known_hosts");
+        jsch.setKnownHosts(userHomeDir.replace('\\','/') + "/.ssh/known_hosts");//move to SftpConnection
 
         Session jschSession = jsch.getSession(username, remoteHost,22);
-        jschSession = debug(jschSession);
         jschSession.setPassword(password);
+
+        //debug(jschSession);
+
         jschSession.connect(SESSION_TIMEOUT);
         return (ChannelSftp) jschSession.openChannel("sftp");
     }
-
-//    public SSHClient setupSshj() throws IOException {
-//        SSHClient client = new SSHClient();
-//        client.addHostKeyVerifier(new PromiscuousVerifier());
-//        client.connect(remoteHost);
-//        client.authPassword(username, password);
-//        return client;
-//    }
 
     public Session debug(Session jschSession){
         java.util.Properties config = new java.util.Properties();
@@ -39,3 +45,4 @@ public class JschConfig {
         return jschSession;
     }
 }
+
