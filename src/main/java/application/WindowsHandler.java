@@ -1,5 +1,8 @@
 package application;
 
+import application.connection.ftpconnection.FtpConnectionFactory;
+import application.connection.sftpconnection.SftpConnectionFactory;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
