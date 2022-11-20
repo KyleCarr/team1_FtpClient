@@ -1,4 +1,4 @@
-package application;
+package application.connection.sftpconnection;
 
 import application.connection.ConnectionFactory;
 import application.connection.EstablishedConnection;

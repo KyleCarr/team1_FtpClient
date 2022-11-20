@@ -1,4 +1,4 @@
-package application;
+package application.connection.sftpconnection;
 
 
 import com.jcraft.jsch.JSchException;

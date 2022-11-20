@@ -1,5 +1,6 @@
-package application;
+package application.connection.sftpconnection;
 
+import application.DirectoryItem;
 import application.connection.EstablishedConnection;
 import application.connection.sftpconnection.SftpConnectionFactory;
 import org.junit.jupiter.api.Test;
@@ -40,5 +41,10 @@ class SftpConnectionTest {
             assertEquals(expected,actual);
             Files.writeString(path, actual, StandardCharsets.UTF_8);
         }
+    }
+
+    @Test
+    void pwd() {
+        connection.pwd();
     }
 }

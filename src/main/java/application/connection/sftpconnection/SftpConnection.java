@@ -58,7 +58,16 @@ public class SftpConnection extends EstablishedConnection {
         }
     }
 
+    @Override
+    public boolean cd(List<String> pathList) {
 
+        return false;
+    }
+
+    @Override
+    public String pwd() {
+        return null;
+    }
 
     @Override
     public void disconnect() {

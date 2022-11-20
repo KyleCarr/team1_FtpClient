@@ -1,5 +1,6 @@
-package application;
+package application.connection.ftpconnection;
 
+import application.DirectoryItem;
 import application.connection.EstablishedConnection;
 import application.connection.ftpconnection.FtpConnectionFactory;
 import org.junit.jupiter.api.Test;
