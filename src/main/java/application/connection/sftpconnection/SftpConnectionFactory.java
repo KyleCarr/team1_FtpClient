@@ -1,10 +1,10 @@
 package application.connection.sftpconnection;
 
-import Config.JschConfig;
 import application.connection.EstablishedConnection;
 import application.connection.ConnectionFactory;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSchException;
+import config.JschConfig;
 
 public class SftpConnectionFactory implements ConnectionFactory {
 

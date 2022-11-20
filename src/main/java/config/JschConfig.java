@@ -1,17 +1,6 @@
-package Config;
+package config;
 
 import com.jcraft.jsch.*;
-import net.schmizz.sshj.SSHClient;
-import net.schmizz.sshj.transport.verification.PromiscuousVerifier;
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.Scanner;
-import java.util.function.Predicate;
 
 public final class JschConfig {
 

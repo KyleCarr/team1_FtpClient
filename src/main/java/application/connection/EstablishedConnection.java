@@ -7,6 +7,9 @@ import java.util.List;
 public abstract class EstablishedConnection {
     public abstract boolean isConnected();
     public abstract String getFile(String filename);
+
+    public abstract String getFile(String filename, String remoteHost);
+
     public abstract List<DirectoryItem> listDirectory();
     public abstract boolean cd(List<String> pathList );
     public abstract String pwd();

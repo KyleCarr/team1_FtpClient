@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UnixHandler extends AbstractHandler{
@@ -17,6 +18,12 @@ public class UnixHandler extends AbstractHandler{
         System.out.println("type sftp or ftp");
         choice = input.nextLine();
         if (choice.equals("sftp")) {
+            System.out.println("enter remotehost");
+            this.remoteHost = input.nextLine();
+            System.out.println("enter username");
+            this.username = input.nextLine();
+            System.out.println("enter password");
+            this.password = input.nextLine();
             connection = new SftpConnectionFactory().connect(remoteHost, username, password);
             System.out.println("sftp connection established");
         }
@@ -28,23 +35,26 @@ public class UnixHandler extends AbstractHandler{
         System.out.println("Input commands or press q to exit");
         while (true) {
             choice = input.nextLine();
-
-            switch(choice) {
+            List<String> commands = new ArrayList<>(List.of(choice.split(" ")));
+            switch(commands.get(0)) {
                 case "ls":
                     List<DirectoryItem> files = connection.listDirectory();
                     files.forEach(file->System.out.println(file));
                     break;
-
                 case "get":
-                    Path path = Paths.get("src/test/resources/readme.txt");
-
-                    String actual = connection.getFile("readme.txt");
-                    Files.writeString(path, actual, StandardCharsets.UTF_8);
+                    String file =commands.get(1);
+                    String remoteHost = commands.get(2);
+                    if(commands.size() == 2){
+                        connection.getFile(file);
+                    }
+                    else{
+                        connection.getFile(file, remoteHost);
+                    }
+                    System.out.println("file has been downloaded");
                     break;
-
                 case "q":
                     System.exit(0);
-
+                    break;
                 default:
                     System.out.println("Invalid input");
                     break;
