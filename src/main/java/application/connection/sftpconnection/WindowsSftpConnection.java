@@ -1,18 +1,5 @@
 package application.connection.sftpconnection;
 
-import Config.JschConfig;
-import com.jcraft.jsch.ChannelSftp;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.SftpException;
-import exception.ClientConnectionException;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Scanner;
-import java.util.Vector;
-
 public class WindowsSftpConnection {
 //
 //    Scanner input = new Scanner(System.in);

@@ -36,6 +36,11 @@ public class FtpConnection extends EstablishedConnection {
     }
 
     @Override
+    public String getFile(String filename, String remoteHost) {
+        return null;
+    }
+
+    @Override
     public List<DirectoryItem> listDirectory() {
         List<DirectoryItem> directoryItemList = new ArrayList<>();
 
