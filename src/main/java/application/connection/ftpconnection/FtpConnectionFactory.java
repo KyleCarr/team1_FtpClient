@@ -12,21 +12,23 @@ import java.net.URLConnection;
 public class FtpConnectionFactory implements ConnectionFactory {
     @Override
     public EstablishedConnection connect(String remoteHost, String username, String password) {
-        String urlString = "ftp://" + username + ":" + password + "@" + remoteHost + "/;type=d";
-        URL url = null;
+        URL url = buildURL(remoteHost, username, password);
         try {
-            url = new URL(urlString);
-        } catch (MalformedURLException e) {
-            throw new ClientConnectionException("Invalid URL String: " + urlString + ". Wrappred exception message: " + e.getMessage(),e);
-        }
-        URLConnection urlConnection = null;
-        try {
-            urlConnection = url.openConnection();
+            URLConnection urlConnection = url.openConnection();
             urlConnection.setConnectTimeout(CHANNEL_TIMEOUT);
             urlConnection.connect();
+            return new FtpConnection(urlConnection);
         } catch (IOException e) {
             throw new ClientConnectionException(e.getMessage(), e);
         }
-        return new FtpConnection(urlConnection);
+    }
+
+    private URL buildURL(String remoteHost, String username, String password) {
+        String urlString = "ftp://" + username + ":" + password + "@" + remoteHost + "/;type=d";
+        try {
+            return new URL(urlString);
+        } catch (MalformedURLException e) {
+            throw new ClientConnectionException("Invalid URL String: " + urlString + ". Wrapped exception message: " + e.getMessage(),e);
+        }
     }
 }

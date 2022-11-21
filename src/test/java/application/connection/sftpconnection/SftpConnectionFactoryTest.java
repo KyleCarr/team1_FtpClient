@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SftpConnectionFactoryTest {
 
-    private final ConnectionFactory connectionFactory = new SftpConnectionFactory();
+    private final ConnectionFactory connectionFactory = new SftpConnectionFactoryProxy();
 
     @Test
     void connect() {
