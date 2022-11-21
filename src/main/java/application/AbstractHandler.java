@@ -3,7 +3,6 @@ package application;
 import application.connection.EstablishedConnection;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Scanner;
 
 public abstract class AbstractHandler {

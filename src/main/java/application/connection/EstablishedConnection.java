@@ -13,6 +13,7 @@ public abstract class EstablishedConnection {
     public abstract List<DirectoryItem> listDirectory();
     public abstract boolean cd(List<String> pathList );
     public abstract String pwd();
+    public abstract void find(String search);
     //public void download(ChannelSftp channelSftp, String filePath, String savePath) throws SftpException;
     public abstract void disconnect();
 }

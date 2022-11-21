@@ -13,7 +13,7 @@ public class FtpConnectionFactory implements ConnectionFactory {
     @Override
     public EstablishedConnection connect(String remoteHost, String username, String password) {
         String urlString = "ftp://" + username + ":" + password + "@" + remoteHost + "/;type=d";
-        URL url = null;
+        URL url;
         try {
             url = new URL(urlString);
         } catch (MalformedURLException e) {

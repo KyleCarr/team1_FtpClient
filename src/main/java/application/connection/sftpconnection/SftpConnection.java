@@ -2,16 +2,21 @@ package application.connection.sftpconnection;
 
 import application.DirectoryItem;
 import application.connection.EstablishedConnection;
+import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
 import exception.ClientConnectionException;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import static java.lang.Math.min;
 
 public class SftpConnection extends EstablishedConnection {
 
@@ -73,9 +78,57 @@ public class SftpConnection extends EstablishedConnection {
     }
 
     @Override
+    public void find(String search) {
+        try {
+            ChannelExec channelExec = (ChannelExec) channelSftp.getSession().openChannel("exec");
+            channelExec.setCommand("find . " + search);
+
+            InputStream in = channelExec.getInputStream();
+            InputStream err = channelExec.getExtInputStream();
+
+            channelExec.connect();
+            readCommandOutput(in,err,channelExec);
+        } catch (JSchException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public void disconnect() {
         channelSftp.disconnect();
     }
 
+    private void readCommandOutput(InputStream in, InputStream err, ChannelExec channelExec){
+        try {
+
+            ByteArrayOutputStream outputBuffer = new ByteArrayOutputStream();
+            ByteArrayOutputStream errorBuffer = new ByteArrayOutputStream();
+            byte[] tmp = new byte[1024];
+            while (true) {
+                while (in.available() > 0) {
+                    int i = in.read(tmp, 0, 1024);
+                    if (i < 0) break;
+                    outputBuffer.write(tmp, 0, i);
+                }
+                while (err.available() > 0) {
+                    int i = err.read(tmp, 0, 1024);
+                    if (i < 0) break;
+                    errorBuffer.write(tmp, 0, i);
+                }
+                if (channelExec.isClosed()) {
+                    if ((in.available() > 0) || (err.available() > 0)) continue;
+                    System.out.println("exit-status: " + channelExec.getExitStatus());
+                    break;
+                }
+            }
+            System.out.println(outputBuffer.toString(StandardCharsets.UTF_8));
+            System.out.println(errorBuffer.toString(StandardCharsets.UTF_8));
+        }
+        catch (IOException e){
+            throw new RuntimeException(e);
+        }
+    }
 
 }
