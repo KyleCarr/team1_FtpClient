@@ -21,7 +21,7 @@ class SftpConnectionTest {
     private final String username = "demo";
     private final String password = "password";
 
-    private EstablishedConnection connection = new SftpConnectionFactory().connect(remoteHost, username, password);
+    private EstablishedConnection connection = new SftpConnectionFactoryProxy().connect(remoteHost, username, password);
 
     @Test
     void listDirectory() {
