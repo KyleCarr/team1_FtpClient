@@ -70,6 +70,12 @@ public class FtpConnection extends EstablishedConnection {
     }
 
     @Override
+    public void find(String search) {
+
+
+    }
+
+    @Override
     public void disconnect() {
         System.out.println("No discconect available for URLConnection");
     }

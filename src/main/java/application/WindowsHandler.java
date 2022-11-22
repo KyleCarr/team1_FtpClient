@@ -4,23 +4,18 @@ import application.connection.ftpconnection.FtpConnectionFactory;
 import application.connection.sftpconnection.SftpConnectionFactory;
 import application.connection.sftpconnection.SftpConnectionFactoryProxy;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class WindowsHandler extends AbstractHandler{
     @Override
-    public void handleInput() throws IOException {
+    public void handleInput() {
         String choice;
         System.out.println("type sftp or ftp");
         choice = input.nextLine();
         if (choice.equals("sftp")) {
             // alternatively can move this part to main and then pass connection abstractly to the handler
-            // change to windows versions
+            // change to Windows versions
             System.out.println("enter remotehost");
             this.remoteHost = input.nextLine();
             System.out.println("enter username");
@@ -46,14 +41,17 @@ public class WindowsHandler extends AbstractHandler{
                     break;
                 case "get":
                     String file = commands.get(1);
-                    String remoteHost = commands.get(2);
+                    String localDirectory = commands.get(2);
                     if(commands.size() == 2){
                         connection.getFile(file);
                     }
                    else{
-                        connection.getFile(file, remoteHost);
+                        connection.getFile(file, localDirectory);
                    }
                     System.out.println("file has been downloaded");
+                    break;
+                case "find":
+                    connection.find(commands.get(1));
                     break;
                 case "q":
                     System.exit(0);
