@@ -39,12 +39,12 @@ public class UnixHandler extends AbstractHandler{
                     break;
                 case "get":
                     String file =commands.get(1);
-                    //String remoteHost = commands.get(2);
+                    String localDirectory = commands.get(2);
                     if(commands.size() == 2){
                         connection.getFile(file);
                     }
                     else{
-                        connection.getFile(file, remoteHost);
+                        connection.getFile(file, localDirectory);
                     }
                     System.out.println("file has been downloaded");
                     break;

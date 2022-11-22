@@ -87,7 +87,9 @@ public class SftpConnection extends EstablishedConnection {
             InputStream err = channelExec.getExtInputStream();
 
             channelExec.connect();
-            readCommandOutput(in,err,channelExec);
+            List<String> output = readCommandOutput(in,err,channelExec);
+            System.out.println(output.get(0));
+            System.out.println(output.get(1));
         } catch (JSchException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -100,7 +102,7 @@ public class SftpConnection extends EstablishedConnection {
         channelSftp.disconnect();
     }
 
-    private void readCommandOutput(InputStream in, InputStream err, ChannelExec channelExec){
+    private List<String> readCommandOutput(InputStream in, InputStream err, ChannelExec channelExec){
         try {
 
             ByteArrayOutputStream outputBuffer = new ByteArrayOutputStream();
@@ -123,8 +125,10 @@ public class SftpConnection extends EstablishedConnection {
                     break;
                 }
             }
-            System.out.println(outputBuffer.toString(StandardCharsets.UTF_8));
-            System.out.println(errorBuffer.toString(StandardCharsets.UTF_8));
+            List<String> output = new ArrayList<>();
+            output.add(outputBuffer.toString(StandardCharsets.UTF_8));
+            output.add(errorBuffer.toString(StandardCharsets.UTF_8));
+            return output;
         }
         catch (IOException e){
             throw new RuntimeException(e);
