@@ -1,13 +1,9 @@
 package application;
 
 import application.connection.ftpconnection.FtpConnectionFactory;
-import application.connection.sftpconnection.SftpConnectionFactory;
+import application.connection.sftpconnection.SftpConnectionFactoryProxy;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +20,7 @@ public class UnixHandler extends AbstractHandler{
             this.username = input.nextLine();
             System.out.println("enter password");
             this.password = input.nextLine();
-            connection = new SftpConnectionFactory().connect(remoteHost, username, password);
+            connection = new SftpConnectionFactoryProxy().connect(remoteHost, username, password);
             System.out.println("sftp connection established");
         }
         else {
@@ -43,7 +39,7 @@ public class UnixHandler extends AbstractHandler{
                     break;
                 case "get":
                     String file =commands.get(1);
-                    String remoteHost = commands.get(2);
+                    //String remoteHost = commands.get(2);
                     if(commands.size() == 2){
                         connection.getFile(file);
                     }
