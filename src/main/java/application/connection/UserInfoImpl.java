@@ -27,7 +27,9 @@ public class UserInfoImpl implements UserInfo {
 
     @Override
     public boolean promptYesNo(String s) {
-        int reply = JOptionPane.showConfirmDialog(null, s, "",  JOptionPane.YES_NO_OPTION);
+        JFrame jFrame = new JFrame();
+        jFrame.setAlwaysOnTop(true);
+        int reply = JOptionPane.showConfirmDialog(jFrame, s, "",  JOptionPane.YES_NO_OPTION);
         return (reply == JOptionPane.YES_OPTION);
     }
 
