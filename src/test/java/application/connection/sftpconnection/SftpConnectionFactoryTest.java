@@ -17,5 +17,6 @@ class SftpConnectionFactoryTest {
         String username = "demo";
         String password = "password";
         EstablishedConnection connect = connectionFactory.connect(remoteHost, username, password);
+        assertNotNull(connect.listDirectory());
     }
 }

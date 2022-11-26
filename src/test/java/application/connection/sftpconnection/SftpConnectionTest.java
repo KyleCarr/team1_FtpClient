@@ -2,18 +2,18 @@ package application.connection.sftpconnection;
 
 import application.DirectoryItem;
 import application.connection.EstablishedConnection;
-import application.connection.sftpconnection.SftpConnectionFactory;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SftpConnectionTest {
 
@@ -32,14 +32,18 @@ class SftpConnectionTest {
 
     @Test
     void getFile() throws IOException {
-        Path path = Paths.get("src/test/resources/readme.txt");
+        String downloadsFile = System.getProperty("user.home") + FileSystems.getDefault().getSeparator() +
+                "Downloads" + FileSystems.getDefault().getSeparator() + "readme.txt";
+        Path path = Paths.get(downloadsFile);
         path.toFile().delete();
 
         try (InputStream inputStream = this.getClass().getResourceAsStream("/expected_readme.txt")){
             String expected = new String(inputStream.readAllBytes());
-            String actual = connection.getFile("readme.txt");
-            assertEquals(expected,actual);
-            Files.writeString(path, actual, StandardCharsets.UTF_8);
+            String result = connection.getFile("readme.txt");
+            assertEquals("success",result);
+            assertTrue(path.toFile().exists());
+            String actual = Files.readString(path);
+            assertEquals(expected, actual);
         }
     }
 
