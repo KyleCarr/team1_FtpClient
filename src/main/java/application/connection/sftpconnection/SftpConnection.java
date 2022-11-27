@@ -1,6 +1,7 @@
 package application.connection.sftpconnection;
 
 import application.DirectoryItem;
+import application.connection.observer.FileObserver;
 import application.connection.EstablishedConnection;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.ChannelSftp;
@@ -21,6 +22,7 @@ import java.util.Vector;
 
 public class SftpConnection extends EstablishedConnection {
 
+    private FileObserver observer = new FileObserver();
     private final ChannelSftp channelSftp;
 
     public SftpConnection(ChannelSftp channelSftp){
@@ -33,8 +35,14 @@ public class SftpConnection extends EstablishedConnection {
             channelSftp.get(filename, System.getProperty("user.home") + FileSystems.getDefault().getSeparator() + "Downloads");
             return "success";
         } catch (SftpException e) {
-            throw new ClientConnectionException(e.getMessage(),e);
+            if(observer.update() == true){
+                getFile(filename);
+            }
+            else{
+                return null;
+            }
         }
+        return null;
     }
 
     @Override
@@ -43,8 +51,14 @@ public class SftpConnection extends EstablishedConnection {
              channelSftp.get(filename, remoteHost);
             return "success";
         } catch (SftpException e) {
-            throw new ClientConnectionException(e.getMessage(),e);
+            if (observer.update() == true) {
+                getFile(filename,remoteHost);
+            }
+            else{
+                return null;
+            }
         }
+        return null;
     }
 
     @Override
@@ -60,6 +74,7 @@ public class SftpConnection extends EstablishedConnection {
         } catch (SftpException e) {
             throw new ClientConnectionException(e.getMessage(),e);
         }
+
     }
 
     @Override

@@ -2,6 +2,7 @@ package application.connection.ftpconnection;
 
 import application.DirectoryItem;
 import application.connection.EstablishedConnection;
+import application.connection.observer.FileObserver;
 import exception.ClientConnectionException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class FtpConnection extends EstablishedConnection {
     private final URLConnection urlConnection;
-
+    private FileObserver observer = new FileObserver();
     public FtpConnection(URLConnection urlConnection) {
         this.urlConnection = urlConnection;
     }
@@ -48,7 +49,12 @@ public class FtpConnection extends EstablishedConnection {
         } catch (IOException e) {
             System.err.println("Class of Exception:"+e.getClass());
             System.err.println(ExceptionUtils.getStackTrace(e));
-            throw new ClientConnectionException(e.getMessage(), e);
+            if(observer.update() == true){
+                getFile(filename,localDirectory);
+            }
+            else {
+                throw new ClientConnectionException(e.getMessage(), e);
+            }
         }
         return String.format("Downloaded '%s' to '%s'", filename, localDirectory);
     }
@@ -85,6 +91,23 @@ public class FtpConnection extends EstablishedConnection {
 
     @Override
     public void find(String search) {
+        List<DirectoryItem> activeDirectory;
+        String directory;
+
+            activeDirectory =  listDirectory();
+
+            for(int i = 0; i < activeDirectory.size()-1; i++){
+                directory =activeDirectory.get(i).getName();
+                if(directory.equals(search)){
+                    System.out.println( "TODO: pwd goes here"+ directory);
+                    return;
+                }
+                System.out.println(activeDirectory.get(i).getName());
+                if(cd(directory) == true){
+                    find(search);
+                }
+            }
+            System.out.println( search + " not found");
 
     }
 
