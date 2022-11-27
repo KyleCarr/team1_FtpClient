@@ -1,13 +1,19 @@
-package application;
+package application.handler;
 
+import application.DirectoryItem;
 import application.connection.ftpconnection.FtpConnectionFactory;
+import application.connection.observer.TimeoutObserver;
 import application.connection.sftpconnection.SftpConnectionFactoryProxy;
+import application.handler.AbstractHandler;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UnixHandler extends AbstractHandler{
+public class UnixHandler extends AbstractHandler {
+    private final long TIMEOUT = 300000;
+
+    long startTime = System.currentTimeMillis();
+    private TimeoutObserver observer = new TimeoutObserver();
     @Override
     public void handleInput() {
         String choice;
@@ -36,7 +42,7 @@ public class UnixHandler extends AbstractHandler{
 
         }
         System.out.println("Input commands or press q to exit");
-        while (true) {
+       while ((System.currentTimeMillis() - startTime) < TIMEOUT) {
             System.out.println();
             System.out.print(connection.getPrompt());
             choice = input.nextLine();
@@ -100,6 +106,8 @@ public class UnixHandler extends AbstractHandler{
                     break;
                     // put clear help
             }
+           startTime = System.currentTimeMillis();
         }
+        observer.update();
     }
 }
