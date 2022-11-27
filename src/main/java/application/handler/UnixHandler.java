@@ -1,13 +1,19 @@
-package application;
+package application.handler;
 
+import application.DirectoryItem;
 import application.connection.ftpconnection.FtpConnectionFactory;
+import application.connection.observer.TimeoutObserver;
 import application.connection.sftpconnection.SftpConnectionFactoryProxy;
+import application.handler.AbstractHandler;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UnixHandler extends AbstractHandler{
+public class UnixHandler extends AbstractHandler {
+    private final long TIMEOUT = 300000;
+
+    long startTime = System.currentTimeMillis();
+    private TimeoutObserver observer = new TimeoutObserver();
     @Override
     public void handleInput() {
         String choice;
@@ -36,7 +42,7 @@ public class UnixHandler extends AbstractHandler{
 
         }
         System.out.println("Input commands or press q to exit");
-        while (true) {
+       while ((System.currentTimeMillis() - startTime) < TIMEOUT) {
             System.out.println();
             System.out.print(connection.getPrompt());
             choice = input.nextLine();
@@ -45,6 +51,7 @@ public class UnixHandler extends AbstractHandler{
                 case "ls":
                     List<DirectoryItem> files = connection.listDirectory();
                     files.forEach(file->System.out.println(file));
+                    startTime = System.currentTimeMillis();
                     break;
                 case "get":
                     String file = commands.get(1);
@@ -57,9 +64,11 @@ public class UnixHandler extends AbstractHandler{
                         message = connection.getFile(file, localDirectory);
                     }
                     System.out.println(message);
+                    startTime = System.currentTimeMillis();
                     break;
                 case "find":
                     connection.find(commands.get(1));
+                    startTime = System.currentTimeMillis();
                     break;
                 case "q":
                     connection.disconnect();
@@ -67,15 +76,19 @@ public class UnixHandler extends AbstractHandler{
                     break;
                 case "cd":
                     connection.cd(commands.get(1));
+                    startTime = System.currentTimeMillis();
                     break;
                 case "pwd":
                     String currentDirectory = connection.pwd();
                     System.out.println(currentDirectory);
+                    startTime = System.currentTimeMillis();
                     break;
                 default:
                     System.out.println("Invalid input");
+                    startTime = System.currentTimeMillis();
                     break;
             }
         }
+        observer.update();
     }
 }

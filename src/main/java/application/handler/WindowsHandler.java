@@ -1,13 +1,19 @@
-package application;
+package application.handler;
 
+import application.DirectoryItem;
 import application.connection.ftpconnection.FtpConnectionFactory;
-import application.connection.sftpconnection.SftpConnectionFactory;
+import application.connection.observer.TimeoutObserver;
 import application.connection.sftpconnection.SftpConnectionFactoryProxy;
+import application.handler.AbstractHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WindowsHandler extends AbstractHandler{
+public class WindowsHandler extends AbstractHandler {
+    private final long TIMEOUT = 300000;
+
+    long startTime = System.currentTimeMillis();
+    private TimeoutObserver observer = new TimeoutObserver();
     @Override
     public void handleInput() {
         String choice;
@@ -26,18 +32,25 @@ public class WindowsHandler extends AbstractHandler{
             System.out.println("sftp connection established");
         }
         else {
+            System.out.println("enter remotehost");
+            this.remoteHost = input.nextLine();
+            System.out.println("enter username");
+            this.username = input.nextLine();
+            System.out.println("enter password");
+            this.password = input.nextLine();
             connection = new FtpConnectionFactory().connect(remoteHost, username, password);
             System.out.println("ftp connection established");
 
         }
         System.out.println("Input commands or press q to exit");
-        while (true) {
+        while ((System.currentTimeMillis() - startTime) < TIMEOUT) {
             choice = input.nextLine();
             List<String> commands = new ArrayList<>(List.of(choice.split(" ")));
             switch(commands.get(0)) {
                 case "dir":
                     List<DirectoryItem> files = connection.listDirectory();
                     files.forEach(file->System.out.println(file));
+                    startTime = System.currentTimeMillis();
                     break;
                 case "get":
                     String file = commands.get(1);
@@ -49,17 +62,25 @@ public class WindowsHandler extends AbstractHandler{
                         connection.getFile(file, localDirectory);
                    }
                     System.out.println("file has been downloaded");
+                    startTime = System.currentTimeMillis();
                     break;
                 case "find":
                     connection.find(commands.get(1));
+                    startTime = System.currentTimeMillis();
                     break;
                 case "q":
                     System.exit(0);
                     break;
+                case "cd":
+                    connection.cd(commands.get(1));
+                    startTime = System.currentTimeMillis();
+                    break;
                 default:
                     System.out.println("Invalid input");
+                    startTime = System.currentTimeMillis();
                     break;
             }
         }
+        observer.update();
     }
 }
