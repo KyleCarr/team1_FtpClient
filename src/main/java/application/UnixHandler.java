@@ -60,7 +60,7 @@ public class UnixHandler extends AbstractHandler{
                     System.out.println("file has been downloaded");
                     break;
                 case "put":
-                    file =commands.get(1);
+                    file = commands.get(1);
                     String localDirectory = commands.get(2);
                     System.out.println(localDirectory);
 
@@ -68,7 +68,8 @@ public class UnixHandler extends AbstractHandler{
                     //    connection.putFile(file);
                     //}
                     //else{
-                        connection.putFile(file, localDirectory);
+                    //localDirectory = "src/main/resources/test.txt";
+                    connection.putFile(file, localDirectory);
                     //}
                     System.out.println("file has been uploaded");
                     break;
