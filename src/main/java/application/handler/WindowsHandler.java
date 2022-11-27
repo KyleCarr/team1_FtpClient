@@ -50,7 +50,7 @@ public class WindowsHandler extends AbstractHandler {
                 case "dir":
                     List<DirectoryItem> files = connection.listDirectory();
                     files.forEach(file->System.out.println(file));
-                    startTime = System.currentTimeMillis();
+
                     break;
                 case "get":
                     String file = commands.get(1);
@@ -62,24 +62,21 @@ public class WindowsHandler extends AbstractHandler {
                         connection.getFile(file, localDirectory);
                    }
                     System.out.println("file has been downloaded");
-                    startTime = System.currentTimeMillis();
                     break;
                 case "find":
                     connection.find(commands.get(1));
-                    startTime = System.currentTimeMillis();
                     break;
                 case "q":
                     System.exit(0);
                     break;
                 case "cd":
                     connection.cd(commands.get(1));
-                    startTime = System.currentTimeMillis();
                     break;
                 default:
                     System.out.println("Invalid input");
-                    startTime = System.currentTimeMillis();
                     break;
             }
+            startTime = System.currentTimeMillis();
         }
         observer.update();
     }

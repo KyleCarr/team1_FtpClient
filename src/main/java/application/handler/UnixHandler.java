@@ -51,7 +51,6 @@ public class UnixHandler extends AbstractHandler {
                 case "ls":
                     List<DirectoryItem> files = connection.listDirectory();
                     files.forEach(file->System.out.println(file));
-                    startTime = System.currentTimeMillis();
                     break;
                 case "get":
                     String file = commands.get(1);
@@ -64,11 +63,9 @@ public class UnixHandler extends AbstractHandler {
                         message = connection.getFile(file, localDirectory);
                     }
                     System.out.println(message);
-                    startTime = System.currentTimeMillis();
                     break;
                 case "find":
                     connection.find(commands.get(1));
-                    startTime = System.currentTimeMillis();
                     break;
                 case "q":
                     connection.disconnect();
@@ -76,18 +73,16 @@ public class UnixHandler extends AbstractHandler {
                     break;
                 case "cd":
                     connection.cd(commands.get(1));
-                    startTime = System.currentTimeMillis();
                     break;
                 case "pwd":
                     String currentDirectory = connection.pwd();
                     System.out.println(currentDirectory);
-                    startTime = System.currentTimeMillis();
                     break;
                 default:
                     System.out.println("Invalid input");
-                    startTime = System.currentTimeMillis();
                     break;
             }
+           startTime = System.currentTimeMillis();
         }
         observer.update();
     }
