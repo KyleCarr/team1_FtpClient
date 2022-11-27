@@ -5,7 +5,6 @@ import application.DirectoryItem;
 import java.util.List;
 
 public abstract class EstablishedConnection {
-    public abstract boolean isConnected();
     public abstract String getFile(String filename);
 
     public abstract String getFile(String filename, String remoteHost);
@@ -16,9 +15,9 @@ public abstract class EstablishedConnection {
     public abstract String putFile(String filename, String remoteHost);
 
     public abstract List<DirectoryItem> listDirectory();
-    public abstract boolean cd(List<String> pathList );
+    public abstract boolean cd(String path);
     public abstract String pwd();
     public abstract void find(String search);
-    //public void download(ChannelSftp channelSftp, String filePath, String savePath) throws SftpException;
     public abstract void disconnect();
+    public abstract String getPrompt();
 }
