@@ -12,6 +12,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -27,14 +28,9 @@ public class SftpConnection extends EstablishedConnection {
     }
 
     @Override
-    public boolean isConnected() {
-        return channelSftp.isConnected();
-    }
-
-    @Override
     public String getFile(String filename) {
         try {
-            channelSftp.get(filename, "C:/Users/kylec/Downloads/");
+            channelSftp.get(filename, System.getProperty("user.home") + FileSystems.getDefault().getSeparator() + "Downloads");
             return "success";
         } catch (SftpException e) {
             throw new ClientConnectionException(e.getMessage(),e);
@@ -67,14 +63,31 @@ public class SftpConnection extends EstablishedConnection {
     }
 
     @Override
-    public boolean cd(List<String> pathList) {
+    public boolean cd(String path) {
+        try {
+            channelSftp.cd(path);
+        } catch (SftpException e) {
+            if (e.getMessage().equals("File not found.")){
+                System.out.println("Invalid Directory Path: " + path);
+                return false;
+            }
+            throw new ClientConnectionException(e.getMessage(), e);
+        }
+        return true;
+    }
 
-        return false;
+    @Override
+    public String getPrompt() {
+        return "> ";
     }
 
     @Override
     public String pwd() {
-        return null;
+        try {
+            return channelSftp.pwd();
+        } catch (SftpException e) {
+            throw new ClientConnectionException(e.getMessage(), e);
+        }
     }
 
     @Override

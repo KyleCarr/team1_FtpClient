@@ -14,6 +14,9 @@ public class UnixHandler extends AbstractHandler{
         System.out.println("type sftp or ftp");
         choice = input.nextLine();
         if (choice.equals("sftp")) {
+//            this.remoteHost = "test.rebex.net";
+//            this.username = "demo";
+//            this.password = "password";
             System.out.println("enter remotehost");
             this.remoteHost = input.nextLine();
             System.out.println("enter username");
@@ -24,12 +27,18 @@ public class UnixHandler extends AbstractHandler{
             System.out.println("sftp connection established");
         }
         else {
+//            this.remoteHost = "ftp.dlptest.com";
+//            this.username = "dlpuser";
+//            this.password = "rNrKYTX9g7z3RgJRmxWuGHbeu";
+
             connection = new FtpConnectionFactory().connect(remoteHost, username, password);
             System.out.println("ftp connection established");
 
         }
         System.out.println("Input commands or press q to exit");
         while (true) {
+            System.out.println();
+            System.out.print(connection.getPrompt());
             choice = input.nextLine();
             List<String> commands = new ArrayList<>(List.of(choice.split(" ")));
             switch(commands.get(0)) {
@@ -38,21 +47,30 @@ public class UnixHandler extends AbstractHandler{
                     files.forEach(file->System.out.println(file));
                     break;
                 case "get":
-                    String file =commands.get(1);
-                    String localDirectory = commands.get(2);
+                    String file = commands.get(1);
+                    String message;
                     if(commands.size() == 2){
-                        connection.getFile(file);
+                        message = connection.getFile(file);
                     }
                     else{
-                        connection.getFile(file, localDirectory);
+                        String localDirectory = commands.get(2);
+                        message = connection.getFile(file, localDirectory);
                     }
-                    System.out.println("file has been downloaded");
+                    System.out.println(message);
                     break;
                 case "find":
                     connection.find(commands.get(1));
                     break;
                 case "q":
+                    connection.disconnect();
                     System.exit(0);
+                    break;
+                case "cd":
+                    connection.cd(commands.get(1));
+                    break;
+                case "pwd":
+                    String currentDirectory = connection.pwd();
+                    System.out.println(currentDirectory);
                     break;
                 default:
                     System.out.println("Invalid input");

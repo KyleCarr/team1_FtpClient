@@ -24,7 +24,7 @@ public class SftpConnectionFactory implements ConnectionFactory {
             Session session = jschSessionMap.get(remoteHost);
             ChannelSftp channelSftp = (ChannelSftp) session.openChannel("sftp");
             channelSftp.connect(CHANNEL_TIMEOUT);
-            return new SftpConnection(channelSftp);
+            return new SftpConnectionProxy(channelSftp, remoteHost);
         } catch (JSchException e) {
             throw new ClientConnectionException(e);
         }

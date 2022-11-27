@@ -18,8 +18,6 @@ class FtpConnectionFactoryTest {
         String password = "rNrKYTX9g7z3RgJRmxWuGHbeu";
 
         EstablishedConnection connect = connectionFactory.connect(remoteHost, username, password);
-        assertTrue(connect.isConnected());
-        connect.disconnect();
-
+        assertNotNull(connect.listDirectory());
     }
 }
