@@ -50,6 +50,20 @@ public class WindowsHandler extends AbstractHandler{
                    }
                     System.out.println("file has been downloaded");
                     break;
+
+                case "put":
+                    file =commands.get(1);
+                    localDirectory = commands.get(2);
+
+                    //if(commands.size() == 2){
+                    //    connection.putFile(file);
+                    //}
+                    //else{
+                    connection.putFile(file, localDirectory);
+                    //}
+                    System.out.println("file has been uploaded");
+                    break;
+
                 case "find":
                     connection.find(commands.get(1));
                     break;

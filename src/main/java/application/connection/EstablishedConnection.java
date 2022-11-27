@@ -10,6 +10,11 @@ public abstract class EstablishedConnection {
 
     public abstract String getFile(String filename, String remoteHost);
 
+    //public abstract String putFile(String filename);
+// put src/test/resources/expected_readme.txt src/main/java/test.txt
+
+    public abstract String putFile(String filename, String remoteHost);
+
     public abstract List<DirectoryItem> listDirectory();
     public abstract boolean cd(List<String> pathList );
     public abstract String pwd();

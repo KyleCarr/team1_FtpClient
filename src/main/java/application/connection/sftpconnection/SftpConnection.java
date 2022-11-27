@@ -52,6 +52,16 @@ public class SftpConnection extends EstablishedConnection {
     }
 
     @Override
+    public String putFile(String filename, String remoteHost) {
+        try {
+            channelSftp.put(filename, remoteHost);
+            return "success";
+        } catch (SftpException e) {
+            throw new ClientConnectionException(e.getMessage(),e);
+        }
+    }
+
+    @Override
     public List<DirectoryItem> listDirectory() {
         try {
             Vector vector = channelSftp.ls(".");
