@@ -53,10 +53,9 @@ public class FtpConnectionProxy extends EstablishedConnection {
     }
 
     @Override
-    public String putFile(String filename, String remoteHost) {
-
-        FtpConnection ftpConnection = new FtpConnection(doConnect(remoteHost, currentDirectory, username, password, null));
-        return ftpConnection.putFile(filename, remoteHost);
+    public String putFile(String filename, String localDirectory) {
+        FtpConnection ftpConnection = new FtpConnection(doConnect(remoteHost, currentDirectory, username, password, localDirectory));
+        return ftpConnection.putFile(filename, localDirectory);
     }
 
     @Override

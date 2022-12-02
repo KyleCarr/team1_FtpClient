@@ -8,6 +8,7 @@ import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.SftpException;
 import exception.ClientConnectionException;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -63,12 +64,27 @@ public class SftpConnection extends EstablishedConnection {
 
     @Override
     public String putFile(String filename, String remoteHost) {
-        try {
-            channelSftp.put(filename, remoteHost);
-            return "success";
-        } catch (SftpException e) {
-            throw new ClientConnectionException(e.getMessage(),e);
-        }
+        Boolean retry;
+        do {
+            try {
+                channelSftp.put(filename, remoteHost);
+                return "success";
+
+            } catch (SftpException e) {
+                if (observer.update()){
+                    retry = true;
+                }
+                else {
+                    System.err.println("Class of Exception:" + e.getClass());
+                    System.err.println(ExceptionUtils.getStackTrace(e));
+                    System.out.println("ERROR:" + e.getMessage());
+                    return "failure";
+                }
+            }
+        } while (retry);
+
+        // shouldn't reach this point
+        return null;
     }
 
     @Override
