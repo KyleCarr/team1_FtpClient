@@ -5,8 +5,6 @@ import application.handler.UnixHandler;
 import application.handler.WindowsHandler;
 
 import java.io.IOException;
-import java.util.Scanner;
-
 
 public class Main {
 
@@ -20,7 +18,6 @@ public class Main {
                         handler = new UnixHandler();
                     }
                     handler.handleInput();
-
 
     }
 }
