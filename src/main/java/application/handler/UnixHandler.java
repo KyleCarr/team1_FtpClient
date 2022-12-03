@@ -4,7 +4,6 @@ import application.DirectoryItem;
 import application.connection.ftpconnection.FtpConnectionFactory;
 import application.connection.observer.TimeoutObserver;
 import application.connection.sftpconnection.SftpConnectionFactoryProxy;
-import application.handler.AbstractHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,15 +19,15 @@ public class UnixHandler extends AbstractHandler {
         System.out.println("type sftp or ftp");
         choice = input.nextLine();
         if (choice.equals("sftp")) {
-//            this.remoteHost = "test.rebex.net";
-//            this.username = "demo";
-//            this.password = "password";
-            System.out.println("enter remotehost");
-            this.remoteHost = input.nextLine();
-            System.out.println("enter username");
-            this.username = input.nextLine();
-            System.out.println("enter password");
-            this.password = input.nextLine();
+            this.remoteHost = "test.rebex.net";
+            this.username = "demo";
+            this.password = "password";
+//            System.out.println("enter remotehost");
+//            this.remoteHost = input.nextLine();
+//            System.out.println("enter username");
+//            this.username = input.nextLine();
+//            System.out.println("enter password");
+//            this.password = input.nextLine();
             connection = new SftpConnectionFactoryProxy().connect(remoteHost, username, password);
             System.out.println("sftp connection established");
         }
@@ -60,10 +59,8 @@ public class UnixHandler extends AbstractHandler {
                     }
                     else{
                         String localDirectory = commands.get(2);
-                        message = connection.getFile(file, localDirectory);
+                        connection.getFile(file, localDirectory);
                     }
-                    System.out.println(message);
-                    System.out.println("file has been downloaded");
                     break;
                 case "put":
                     file = commands.get(1);
