@@ -38,6 +38,9 @@ public class UnixHandler extends AbstractHandler {
 //            this.password = "rNrKYTX9g7z3RgJRmxWuGHbeu";
 
             connection = new FtpConnectionFactory().connect(remoteHost, username, password);
+            if (connection == null){
+                System.exit(1);
+            }
             System.out.println("ftp connection established");
 
         }
