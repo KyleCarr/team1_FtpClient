@@ -6,6 +6,7 @@ import application.connection.observer.TimeoutObserver;
 import application.connection.sftpconnection.SftpConnectionFactoryProxy;
 import application.handler.AbstractHandler;
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class UnixHandler extends AbstractHandler {
             System.out.println("enter username");
             this.username = input.nextLine();
             System.out.println("enter password");
-            this.password = input.nextLine();
+            this.password = new String(System.console().readPassword());
             connection = new SftpConnectionFactoryProxy().connect(remoteHost, username, password);
             System.out.println("sftp connection established");
         }

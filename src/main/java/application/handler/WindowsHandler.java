@@ -27,7 +27,7 @@ public class WindowsHandler extends AbstractHandler {
             System.out.println("enter username");
             this.username = input.nextLine();
             System.out.println("enter password");
-            this.password = input.nextLine();
+            this.password = new String(System.console().readPassword());
             connection = new SftpConnectionFactoryProxy().connect(remoteHost, username, password);
             System.out.println("sftp connection established");
         }
