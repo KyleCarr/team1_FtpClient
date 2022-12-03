@@ -6,13 +6,7 @@ import application.connection.observer.FileObserver;
 import exception.ClientConnectionException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URLConnection;
 import java.nio.file.FileSystems;
 import java.util.ArrayList;
@@ -57,6 +51,38 @@ public class FtpConnection extends EstablishedConnection {
             }
         }
         return String.format("Downloaded '%s' to '%s'", filename, localDirectory);
+    }
+
+    @Override
+    public String putFile(String filename, String remoteHost) {
+        Boolean retry;
+        do {
+            try (OutputStream outputStream = urlConnection.getOutputStream()) {
+
+                FileInputStream fileInputStream = new FileInputStream(filename);
+                int blockSize = 16384;
+                int bytesRead = 0;
+                byte[] buffer = new byte[blockSize];
+                while ((bytesRead = fileInputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+                return "success";
+
+            } catch (IOException e) {
+                if (observer.update()){
+                    retry = true;
+                }
+                else {
+                    System.err.println("Class of Exception:" + e.getClass());
+                    System.err.println(ExceptionUtils.getStackTrace(e));
+                    System.out.println("ERROR:" + e.getMessage());
+                    return "failure";
+                }
+            }
+        } while (retry);
+
+        // shouldn't reach this point
+        return null;
     }
 
     @Override

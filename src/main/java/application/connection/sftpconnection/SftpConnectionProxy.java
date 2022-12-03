@@ -7,6 +7,7 @@ import com.jcraft.jsch.ChannelSftp;
 import java.util.Arrays;
 import java.util.List;
 
+
 /**
  * Proxy class for SftpConnection. It caches the user's current directory on the remote SFTP
  * server, returning that when a pwd() function is called. It also keeps the remoteHost and returns
@@ -34,6 +35,10 @@ public class SftpConnectionProxy extends EstablishedConnection {
         return sftpConnection.getFile(filename, remoteHost);
     }
 
+    @Override
+    public String putFile(String filename, String remoteHost) {
+        return sftpConnection.putFile(filename, remoteHost);
+    }
     @Override
     public List<DirectoryItem> listDirectory() {
         return sftpConnection.listDirectory();

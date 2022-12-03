@@ -33,9 +33,9 @@ public class UnixHandler extends AbstractHandler {
             System.out.println("sftp connection established");
         }
         else {
-//            this.remoteHost = "ftp.dlptest.com";
-//            this.username = "dlpuser";
-//            this.password = "rNrKYTX9g7z3RgJRmxWuGHbeu";
+            this.remoteHost = "ftp.dlptest.com";
+            this.username = "dlpuser";
+            this.password = "rNrKYTX9g7z3RgJRmxWuGHbeu";
 
             connection = new FtpConnectionFactory().connect(remoteHost, username, password);
             System.out.println("ftp connection established");
@@ -63,6 +63,33 @@ public class UnixHandler extends AbstractHandler {
                         message = connection.getFile(file, localDirectory);
                     }
                     System.out.println(message);
+                    System.out.println("file has been downloaded");
+                    break;
+                case "put":
+                    file = commands.get(1);
+                    String localDirectory = commands.get(2);
+
+                    message = connection.putFile(file, localDirectory);
+
+                    System.out.println(message);
+                    break;
+                case "help":
+                    System.out.println("Welcome to FTP/SFTP terminal project! Here are the available commands:");
+                    System.out.println("ls: Prints directory onto console");
+                    System.out.println("get <filepath> <destination> OR get <filepath>: Downloads file to chosen directory. " +
+                            "If no destination is provided, file will be sent to Downloads folder");
+                    System.out.println("put <filepath> <destination>: Uploads file to destination directory");
+                    System.out.println("clear: Clears console of all output");
+                    System.out.println("find <filename>: Searches remote directory for the given filename and outputs all searched paths on console");
+                    System.out.println("cd <path>: Enters given directory");
+                    System.out.println("pwd: Prints current remote directory onto console");
+                    System.out.println("q: Quits program");
+
+                    break;
+                case "clear":
+                    for (int i = 0; i < 100; i++) {
+                        System.out.println();
+                    }
                     break;
                 case "find":
                     connection.find(commands.get(1));
