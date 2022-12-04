@@ -25,6 +25,11 @@ class FtpConnectionTest {
     }
 
     @Test
+    void getFile() {
+        String file = connection.getFile("Thanks.pdf");
+    }
+
+    @Test
     void cd_pwd() {
         assertEquals("/",connection.pwd());
         connection.cd("frep");

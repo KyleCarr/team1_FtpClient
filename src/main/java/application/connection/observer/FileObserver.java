@@ -4,6 +4,9 @@ import java.util.Scanner;
 
 public class FileObserver extends Observer {
 
+    public void updateStatus(String status, String filename) {
+        System.out.println("File '" + filename + "': " + status);
+    }
 
     @Override
     public boolean update() {
@@ -20,6 +23,5 @@ public class FileObserver extends Observer {
             }
         }
     }
-
 }
 

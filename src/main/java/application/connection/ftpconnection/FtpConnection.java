@@ -3,6 +3,7 @@ package application.connection.ftpconnection;
 import application.DirectoryItem;
 import application.connection.EstablishedConnection;
 import application.connection.observer.FileObserver;
+import application.connection.observer.FtpFile;
 import exception.ClientConnectionException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -29,19 +30,28 @@ public class FtpConnection extends EstablishedConnection {
 
     @Override
     public String getFile(String filename, String localDirectory) {
+        FtpFile ftpFile = new FtpFile(filename);
+        ftpFile.registerObserver(observer);
+        ftpFile.updateStatus("Preparing to get file");
+
         try (InputStream inputStream = urlConnection.getInputStream();
              ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
              FileOutputStream fileOutputStream = new FileOutputStream(localDirectory + FileSystems.getDefault().getSeparator() + filename)) {
+            ftpFile.updateStatus("Getting file ");
             int blockSize = 16384;
             int bytesRead = 0;
             byte[] buffer = new byte[blockSize];
             while ((bytesRead = inputStream.read(buffer)) != -1) {
                 byteOutputStream.write(buffer, 0, bytesRead);
             }
+            ftpFile.updateStatus("Saving file to local filesystem");
             byteOutputStream.writeTo(fileOutputStream);
+            ftpFile.updateStatus("Get of file '" + filename + "' complete. File saved to '" + localDirectory + "'");
         } catch (FileNotFoundException e) {
+            ftpFile.updateStatus("Get failed - file '" + filename + "' not found");
             return String.format("Error: File '%s' not found", filename);
         } catch (IOException e) {
+            ftpFile.updateStatus("Get failed for file '" + filename + "'. An unexpected error occurred");
             System.err.println("Class of Exception:" + e.getClass());
             System.err.println(ExceptionUtils.getStackTrace(e));
             if (observer.update()) {
@@ -56,20 +66,27 @@ public class FtpConnection extends EstablishedConnection {
     @Override
     public String putFile(String filename, String remoteHost) {
         Boolean retry;
+        FtpFile ftpFile = new FtpFile(filename);
+        ftpFile.registerObserver(observer);
+
         do {
+            ftpFile.updateStatus("Preparing to put file");
             try (OutputStream outputStream = urlConnection.getOutputStream()) {
 
                 FileInputStream fileInputStream = new FileInputStream(filename);
+                ftpFile.updateStatus("Putting file ");
                 int blockSize = 16384;
                 int bytesRead = 0;
                 byte[] buffer = new byte[blockSize];
                 while ((bytesRead = fileInputStream.read(buffer)) != -1) {
                     outputStream.write(buffer, 0, bytesRead);
                 }
+                ftpFile.updateStatus("Put of file '" + filename + "' to remote server complete.");
                 return "File was uploaded successfully";
 
             } catch (IOException e) {
-                if (observer.update()) {
+                ftpFile.updateStatus("Put failed for file '" + filename + "'. An unexpected error occurred");
+                if (observer.update()){
                     retry = true;
                 } else {
                     System.err.println("Class of Exception:" + e.getClass());

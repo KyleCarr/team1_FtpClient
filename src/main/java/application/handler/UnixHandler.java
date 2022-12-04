@@ -1,6 +1,7 @@
 package application.handler;
 
 import application.connection.observer.TimeoutObserver;
+import application.connection.sftpconnection.SftpConnectionFactoryProxy;
 
 import java.util.ArrayList;
 import java.util.List;
