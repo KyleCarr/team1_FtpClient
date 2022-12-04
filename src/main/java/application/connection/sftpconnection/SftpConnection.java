@@ -1,8 +1,8 @@
 package application.connection.sftpconnection;
 
 import application.DirectoryItem;
-import application.connection.observer.FileObserver;
 import application.connection.EstablishedConnection;
+import application.connection.observer.FileObserver;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSchException;
@@ -23,10 +23,10 @@ import java.util.Vector;
 
 public class SftpConnection extends EstablishedConnection {
 
-    private FileObserver observer = new FileObserver();
+    private final FileObserver observer = new FileObserver();
     private final ChannelSftp channelSftp;
 
-    public SftpConnection(ChannelSftp channelSftp){
+    public SftpConnection(ChannelSftp channelSftp) {
         this.channelSftp = channelSftp;
     }
 
@@ -34,32 +34,30 @@ public class SftpConnection extends EstablishedConnection {
     public String getFile(String filename) {
         try {
             channelSftp.get(filename, System.getProperty("user.home") + FileSystems.getDefault().getSeparator() + "Downloads");
-            return "success";
+            return "file has been downloaded";
         } catch (SftpException e) {
-            if(observer.update() == true){
+            if (observer.update()) {
                 getFile(filename);
-            }
-            else{
-                return null;
+            } else {
+                return "file has not been downloaded";
             }
         }
-        return null;
+        return "error";
     }
 
     @Override
     public String getFile(String filename, String remoteHost) {
         try {
-             channelSftp.get(filename, remoteHost);
-            return "success";
+            channelSftp.get(filename, remoteHost);
+            return "file has been downloaded";
         } catch (SftpException e) {
-            if (observer.update() == true) {
-                getFile(filename,remoteHost);
-            }
-            else{
-                return null;
+            if (observer.update()) {
+                getFile(filename, remoteHost);
+            } else {
+                return "file has not been downloaded";
             }
         }
-        return null;
+        return "error";
     }
 
     @Override
@@ -71,10 +69,9 @@ public class SftpConnection extends EstablishedConnection {
                 return "success";
 
             } catch (SftpException e) {
-                if (observer.update()){
+                if (observer.update()) {
                     retry = true;
-                }
-                else {
+                } else {
                     System.err.println("Class of Exception:" + e.getClass());
                     System.err.println(ExceptionUtils.getStackTrace(e));
                     System.out.println("ERROR:" + e.getMessage());
@@ -92,13 +89,13 @@ public class SftpConnection extends EstablishedConnection {
         try {
             Vector vector = channelSftp.ls(".");
             List<DirectoryItem> directoryItemList = new ArrayList<>();
-            for (Iterator iterator = vector.iterator();iterator.hasNext();){
+            for (Iterator iterator = vector.iterator(); iterator.hasNext(); ) {
                 ChannelSftp.LsEntry lsEntry = (ChannelSftp.LsEntry) iterator.next();
                 directoryItemList.add(new DirectoryItem(lsEntry));
             }
             return directoryItemList;
         } catch (SftpException e) {
-            throw new ClientConnectionException(e.getMessage(),e);
+            throw new ClientConnectionException(e.getMessage(), e);
         }
 
     }
@@ -108,7 +105,7 @@ public class SftpConnection extends EstablishedConnection {
         try {
             channelSftp.cd(path);
         } catch (SftpException e) {
-            if (e.getMessage().equals("File not found.")){
+            if (e.getMessage().equals("File not found.")) {
                 System.out.println("Invalid Directory Path: " + path);
                 return false;
             }
@@ -141,12 +138,10 @@ public class SftpConnection extends EstablishedConnection {
             InputStream err = channelExec.getExtInputStream();
 
             channelExec.connect();
-            List<String> output = readCommandOutput(in,err,channelExec);
+            List<String> output = readCommandOutput(in, err, channelExec);
             System.out.println(output.get(0));
             System.out.println(output.get(1));
-        } catch (JSchException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (JSchException | IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -156,7 +151,7 @@ public class SftpConnection extends EstablishedConnection {
         channelSftp.disconnect();
     }
 
-    private List<String> readCommandOutput(InputStream in, InputStream err, ChannelExec channelExec){
+    private List<String> readCommandOutput(InputStream in, InputStream err, ChannelExec channelExec) {
         try {
 
             ByteArrayOutputStream outputBuffer = new ByteArrayOutputStream();
@@ -183,8 +178,7 @@ public class SftpConnection extends EstablishedConnection {
             output.add(outputBuffer.toString(StandardCharsets.UTF_8));
             output.add(errorBuffer.toString(StandardCharsets.UTF_8));
             return output;
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

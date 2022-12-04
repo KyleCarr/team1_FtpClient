@@ -15,7 +15,8 @@ import java.util.List;
 
 public class FtpConnection extends EstablishedConnection {
     private final URLConnection urlConnection;
-    private FileObserver observer = new FileObserver();
+    private final FileObserver observer = new FileObserver();
+
     public FtpConnection(URLConnection urlConnection) {
         this.urlConnection = urlConnection;
     }
@@ -23,7 +24,7 @@ public class FtpConnection extends EstablishedConnection {
     @Override
     public String getFile(String filename) {
         String localDirectory = System.getProperty("user.home") + FileSystems.getDefault().getSeparator() + "Downloads";
-        return getFile(filename,localDirectory);
+        return getFile(filename, localDirectory);
     }
 
     @Override
@@ -34,19 +35,18 @@ public class FtpConnection extends EstablishedConnection {
             int blockSize = 16384;
             int bytesRead = 0;
             byte[] buffer = new byte[blockSize];
-            while((bytesRead = inputStream.read(buffer)) != -1){
-                byteOutputStream.write(buffer,0, bytesRead);
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                byteOutputStream.write(buffer, 0, bytesRead);
             }
             byteOutputStream.writeTo(fileOutputStream);
         } catch (FileNotFoundException e) {
             return String.format("Error: File '%s' not found", filename);
         } catch (IOException e) {
-            System.err.println("Class of Exception:"+e.getClass());
+            System.err.println("Class of Exception:" + e.getClass());
             System.err.println(ExceptionUtils.getStackTrace(e));
-            if(observer.update() == true){
-                getFile(filename,localDirectory);
-            }
-            else {
+            if (observer.update()) {
+                getFile(filename, localDirectory);
+            } else {
                 throw new ClientConnectionException(e.getMessage(), e);
             }
         }
@@ -66,17 +66,16 @@ public class FtpConnection extends EstablishedConnection {
                 while ((bytesRead = fileInputStream.read(buffer)) != -1) {
                     outputStream.write(buffer, 0, bytesRead);
                 }
-                return "success";
+                return "File was uploaded successfully";
 
             } catch (IOException e) {
-                if (observer.update()){
+                if (observer.update()) {
                     retry = true;
-                }
-                else {
+                } else {
                     System.err.println("Class of Exception:" + e.getClass());
                     System.err.println(ExceptionUtils.getStackTrace(e));
                     System.out.println("ERROR:" + e.getMessage());
-                    return "failure";
+                    return "File was not uploaded successfully";
                 }
             }
         } while (retry);
@@ -97,7 +96,7 @@ public class FtpConnection extends EstablishedConnection {
                 directoryItemList.add(directoryItem);
             }
         } catch (IOException e) {
-            System.err.println("Class of Exception:"+e.getClass());
+            System.err.println("Class of Exception:" + e.getClass());
             System.err.println(ExceptionUtils.getStackTrace(e));
             throw new ClientConnectionException(e.getMessage(), e);
         }
@@ -117,29 +116,12 @@ public class FtpConnection extends EstablishedConnection {
 
     @Override
     public void find(String search) {
-        List<DirectoryItem> activeDirectory;
-        String directory;
-
-            activeDirectory =  listDirectory();
-
-            for(int i = 0; i < activeDirectory.size()-1; i++){
-                directory =activeDirectory.get(i).getName();
-                if(directory.equals(search)){
-                    System.out.println( "TODO: pwd goes here"+ directory);
-                    return;
-                }
-                System.out.println(activeDirectory.get(i).getName());
-                if(cd(directory) == true){
-                    find(search);
-                }
-            }
-            System.out.println( search + " not found");
-
+        //logic handled in FtpConnectionProxy
     }
 
     @Override
     public void disconnect() {
-
+        //logic handled in FtpConnectionProxy
     }
 
     @Override

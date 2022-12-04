@@ -12,9 +12,14 @@ public abstract class EstablishedConnection {
     public abstract String putFile(String filename, String remoteHost);
 
     public abstract List<DirectoryItem> listDirectory();
+
     public abstract boolean cd(String path);
+
     public abstract String pwd();
+
     public abstract void find(String search);
+
     public abstract void disconnect();
+
     public abstract String getPrompt();
 }

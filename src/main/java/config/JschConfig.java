@@ -1,8 +1,9 @@
 package config;
 
-import com.jcraft.jsch.*;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.JSchException;
 
-import java.io.*;
+import java.io.File;
 
 public final class JschConfig {
 
@@ -18,39 +19,22 @@ public final class JschConfig {
     }
 
     public static synchronized JschConfig getInstance() {
-        if(INSTANCE == null){
+        if (INSTANCE == null) {
             try {
                 INSTANCE = new JschConfig();
             } catch (JSchException e) {
-                throw new RuntimeException(e.getMessage(),e);
+                throw new RuntimeException(e.getMessage(), e);
             }
         }
         return INSTANCE;
     }
-    public JSch getJsch(){
+
+    public JSch getJsch() {
         return jsch;
     }
 
-    public File getKnownHostsFile(){
+    public File getKnownHostsFile() {
         return new File(knownHostsFile);
     }
-
-//    public ChannelSftp setupJsch(String remoteHost, String username, String password) throws JSchException {
-//
-//        Session jschSession = jsch.getSession(username, remoteHost,22);
-//        jschSession.setPassword(password);
-//
-//        //debug(jschSession);
-//
-//        jschSession.connect(SESSION_TIMEOUT);
-//        return (ChannelSftp) jschSession.openChannel("sftp");
-//    }
-//
-//    public Session debug(Session jschSession){
-//        java.util.Properties config = new java.util.Properties();
-//        config.put("StrictHostKeyChecking", "no");
-//        jschSession.setConfig(config);
-//        return jschSession;
-//    }
 }
 

@@ -8,16 +8,16 @@ import java.io.IOException;
 
 public class Main {
 
-    public static void main(String Args[]) throws IOException {
+    public static void main(String[] Args) throws IOException {
 
-                    AbstractHandler handler;
-                    if (System.getProperty("os.name").contains("Windows")) {
-                        handler = new WindowsHandler();
-                    }
-                    else {
-                        handler = new UnixHandler();
-                    }
-                    handler.handleInput();
+
+        AbstractHandler handler;
+        if (System.getProperty("os.name").contains("Windows")) {
+            handler = new WindowsHandler();
+        } else {
+            handler = new UnixHandler();
+        }
+        handler.handleInput();
 
     }
 }

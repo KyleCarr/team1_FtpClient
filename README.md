@@ -10,3 +10,8 @@ Change directory into that target directory:
 Then type the following command to run the program:
 
 `java -cp Team1_FtpClient-1.0-SNAPSHOT-jar-with-dependencies.jar application.Main`
+
+Client credentials for testing the FTP connection: \
+Remote Host: `ftp.dlptest.com` \
+Username:`dlpuser` \
+Password: `rNrKYTX9g7z3RgJRmxWuGHbeu`
