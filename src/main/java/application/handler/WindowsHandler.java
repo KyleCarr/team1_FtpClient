@@ -16,6 +16,8 @@ public class WindowsHandler extends AbstractHandler {
 
         System.out.println("Input commands or press q to exit");
         while ((System.currentTimeMillis() - startTime) < TIMEOUT) {
+            System.out.println();
+            System.out.print(connection.getPrompt());
             choice = input.nextLine();
             List<String> commands = new ArrayList<>(List.of(choice.split(" ")));
             switch (commands.get(0)) {
