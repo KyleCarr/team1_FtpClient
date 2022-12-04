@@ -30,6 +30,8 @@ public class WindowsHandler extends AbstractHandler {
                     break;
                 case "help":
                     help();
+                    System.out.println("dir: Prints directory onto console");
+                    System.out.println("cd: Prints current remote directory onto console");
                     break;
                 case "clear":
                     clear();

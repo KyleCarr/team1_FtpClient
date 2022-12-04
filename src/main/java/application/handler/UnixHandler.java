@@ -32,6 +32,8 @@ public class UnixHandler extends AbstractHandler {
                     break;
                 case "help":
                     help();
+                    System.out.println("ls: Prints directory onto console");
+                    System.out.println("pwd: Prints current remote directory onto console");
                     break;
                 case "clear":
                     clear();
@@ -41,7 +43,6 @@ public class UnixHandler extends AbstractHandler {
                     break;
                 case "q":
                     connection.disconnect();
-
                     break;
                 case "cd":
                     connection.cd(commands.get(1));

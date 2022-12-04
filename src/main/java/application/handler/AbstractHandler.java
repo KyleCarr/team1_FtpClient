@@ -57,14 +57,12 @@ public abstract class AbstractHandler {
 
     protected void help() {
         System.out.println("Welcome to FTP/SFTP terminal project! Here are the available commands:");
-        System.out.println("dir: Prints directory onto console");
         System.out.println("get <filepath> <destination> OR get <filepath>: Downloads file to chosen directory. " +
                 "If no destination is provided, file will be sent to Downloads folder");
         System.out.println("put <filepath> <destination>: Uploads file to destination directory");
         System.out.println("clear: Clears console of all output");
         System.out.println("find <filename>: Searches remote directory for the given filename and outputs all searched paths on console");
         System.out.println("cd <path>: Enters given directory");
-        System.out.println("pwd: Prints current remote directory onto console");
         System.out.println("q: Quits program");
     }
 
