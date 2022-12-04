@@ -14,11 +14,11 @@ import static application.connection.ftpconnection.FtpConnectionHelper.doConnect
  * Proxy class for FtpConnection class. As the UrlConnection class is stateless, this class persists
  * the remote connection information as well as the current directory to provide a stateful view to the
  * FTP Server the user is connected to.
- *
+ * <p>
  * It contains the implementation of the functions listed below. The remaining function calls are passed
  * on to the FTPConnection class.
- *
- *      cd(), pwd(), getPrompt()
+ * <p>
+ * cd(), pwd(), getPrompt()
  */
 
 public class FtpConnectionProxy extends EstablishedConnection {
@@ -85,11 +85,10 @@ public class FtpConnectionProxy extends EstablishedConnection {
             urlConnection.getInputStream().read();
             currentDirectory = path;
         } catch (IOException e) {
-            if (e.getMessage().contains(inputPath + ":550")){
+            if (e.getMessage().contains(inputPath + ":550")) {
                 System.out.println("Invalid Directory Path: " + inputPath);
                 return false;
-            }
-            else {
+            } else {
                 System.out.println("IOException: " + e.getMessage() + "\n    " + e);
                 return false;
             }
@@ -107,15 +106,15 @@ public class FtpConnectionProxy extends EstablishedConnection {
     public void find(String search) {
         List<DirectoryItem> activeDirectory;
         String directory;
-        activeDirectory =  listDirectory();
+        activeDirectory = listDirectory();
 
-        for(int i = 0; i < activeDirectory.size()-1; i++){
-            directory =activeDirectory.get(i).getName();
-            if(directory.equals(search)){
-                System.out.println( "File was found at" + pwd() + "/" + directory);
+        for (int i = 0; i < activeDirectory.size() - 1; i++) {
+            directory = activeDirectory.get(i).getName();
+            if (directory.equals(search)) {
+                System.out.println("File was found at" + pwd() + "/" + directory);
                 return;
             }
-            if(cd(directory) == true){
+            if (cd(directory)) {
                 find(search);
             }
         }
@@ -124,7 +123,7 @@ public class FtpConnectionProxy extends EstablishedConnection {
 
     @Override
     public void disconnect() {
-
+        System.exit(0);
     }
 
     @Override

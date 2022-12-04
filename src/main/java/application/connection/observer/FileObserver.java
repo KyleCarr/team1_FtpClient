@@ -13,7 +13,7 @@ public class FileObserver extends Observer {
         Scanner input = new Scanner(System.in);
         System.out.println("The file transfer has failed. Would you like to retry?(Yes/No)");
         while (true) {
-            switch (input.nextLine()) {
+            switch (input.nextLine().toLowerCase()) {
                 case "yes":
                     return true;
                 case "no":
