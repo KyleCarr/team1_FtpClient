@@ -32,6 +32,7 @@ public class FtpConnectionProxy extends EstablishedConnection {
         currentDirectory = directory;
         this.username = username;
         this.password = password;
+        doConnect(remoteHost, currentDirectory, username, password, null);
     }
 
     @Override
