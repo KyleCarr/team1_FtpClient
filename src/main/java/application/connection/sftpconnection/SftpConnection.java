@@ -3,6 +3,7 @@ package application.connection.sftpconnection;
 import application.DirectoryItem;
 import application.connection.observer.FileObserver;
 import application.connection.EstablishedConnection;
+import application.connection.observer.FtpFile;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSchException;
@@ -33,7 +34,14 @@ public class SftpConnection extends EstablishedConnection {
     @Override
     public String getFile(String filename) {
         try {
-            channelSftp.get(filename, System.getProperty("user.home") + FileSystems.getDefault().getSeparator() + "Downloads");
+            FtpFile ftpFile = new FtpFile(filename);
+            ftpFile.registerObserver(observer);
+            ftpFile.updateStatus("Preparing to get file");
+            String targetDir = System.getProperty("user.home") + FileSystems.getDefault().getSeparator() + "Downloads";
+            ftpFile.updateStatus("Getting file ");
+            channelSftp.get(filename, targetDir);
+            ftpFile.updateStatus("Saving file to local filesystem");
+            ftpFile.updateStatus("Get of file '" + filename + "' complete. File saved to '" + targetDir + "'");
             return "success";
         } catch (SftpException e) {
             if(observer.update() == true){
@@ -49,7 +57,12 @@ public class SftpConnection extends EstablishedConnection {
     @Override
     public String getFile(String filename, String remoteHost) {
         try {
-             channelSftp.get(filename, remoteHost);
+            FtpFile ftpFile = new FtpFile(filename);
+            ftpFile.registerObserver(observer);
+            ftpFile.updateStatus("Preparing to get file");
+            ftpFile.updateStatus("Getting file ");
+            channelSftp.get(filename, remoteHost);
+            ftpFile.updateStatus("Saving file to local filesystem");
             return "success";
         } catch (SftpException e) {
             if (observer.update() == true) {
@@ -65,12 +78,19 @@ public class SftpConnection extends EstablishedConnection {
     @Override
     public String putFile(String filename, String remoteHost) {
         Boolean retry;
+        FtpFile ftpFile = new FtpFile(filename);
+        ftpFile.registerObserver(observer);
         do {
             try {
+                ftpFile.updateStatus("Preparing to put file");
+                ftpFile.updateStatus("Putting file ");
                 channelSftp.put(filename, remoteHost);
+                ftpFile.updateStatus("Put of file '" + filename + "' to remote server complete.");
                 return "success";
 
             } catch (SftpException e) {
+                ftpFile.updateStatus("Put failed for file '" + filename + "'. An unexpected error occurred. " + e.getMessage());
+
                 if (observer.update()){
                     retry = true;
                 }

@@ -4,7 +4,6 @@ import application.DirectoryItem;
 import application.connection.ftpconnection.FtpConnectionFactory;
 import application.connection.observer.TimeoutObserver;
 import application.connection.sftpconnection.SftpConnectionFactoryProxy;
-import application.handler.AbstractHandler;
 
 import java.util.ArrayList;
 import java.util.List;
