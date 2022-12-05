@@ -28,8 +28,10 @@ public class UserInfoImpl implements UserInfo {
     @Override
     public boolean promptYesNo(String s) {
         JFrame jFrame = new JFrame();
+        jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         jFrame.setAlwaysOnTop(true);
         int reply = JOptionPane.showConfirmDialog(jFrame, s, "",  JOptionPane.YES_NO_OPTION);
+        jFrame.dispose();
         return (reply == JOptionPane.YES_OPTION);
     }
 

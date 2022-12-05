@@ -43,6 +43,7 @@ public class UnixHandler extends AbstractHandler {
                     break;
                 case "q":
                     connection.disconnect();
+                    System.exit(0);
                     break;
                 case "cd":
                     connection.cd(commands.get(1));
