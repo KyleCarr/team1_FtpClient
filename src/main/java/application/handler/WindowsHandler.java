@@ -2,6 +2,7 @@ package application.handler;
 
 import application.connection.observer.TimeoutObserver;
 
+import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,9 +26,13 @@ public class WindowsHandler extends AbstractHandler {
                     getDirectories();
                     break;
                 case "get":
+                    if (commands.size() == 3) {
+                        commands.set(2, lowercaseFileName(commands.get(2)));
+                    }
                     get(commands);
                     break;
                 case "put":
+                    commands.set(2, lowercaseFileName(commands.get(2)));
                     put(commands);
                     break;
                 case "help":
@@ -59,6 +64,19 @@ public class WindowsHandler extends AbstractHandler {
         }
         observer.update();
 
+    }
+
+    private String lowercaseFileName(String filepath) {
+        int index = filepath.lastIndexOf(FileSystems.getDefault().getSeparator());
+        if (index != -1) {
+            String first = filepath.substring(0, index);
+            String second = filepath.substring(index);
+            filepath = first + second.toLowerCase();
+        }
+        else {
+            filepath = filepath.toLowerCase();
+        }
+        return filepath;
     }
 
 }
