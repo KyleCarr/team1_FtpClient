@@ -15,3 +15,9 @@ Client credentials for testing the FTP connection: \
 Remote Host: `ftp.dlptest.com` \
 Username:`dlpuser` \
 Password: `rNrKYTX9g7z3RgJRmxWuGHbeu`
+
+Client credentials for testing the SFTP Connection (The client is readonly, so Put cannot be tested with this remote
+server) \
+Remote Host: `test.rebex.net` \
+Username: `demo` \
+Password: `password`
