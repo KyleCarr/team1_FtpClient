@@ -59,5 +59,4 @@ public class UnixHandler extends AbstractHandler {
         observer.update();
     }
 
-
 }
