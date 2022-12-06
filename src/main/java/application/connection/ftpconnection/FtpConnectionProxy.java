@@ -108,14 +108,18 @@ public class FtpConnectionProxy extends EstablishedConnection {
         String directory;
         activeDirectory = listDirectory();
 
-        for (int i = 0; i < activeDirectory.size() - 1; i++) {
+        for (int i = 0; i < activeDirectory.size(); i++) {
             directory = activeDirectory.get(i).getName();
             if (directory.equals(search)) {
-                System.out.println("File was found at" + pwd() + "/" + directory);
+                System.out.println("File was found at " + pwd() + "/" + directory);
                 return;
             }
-            if (cd(directory)) {
-                find(search);
+            if (activeDirectory.get(i).isDirectory()) {
+                String originalPath = currentDirectory;
+                if (cd(directory)) {
+                    find(search);
+                }
+                currentDirectory = originalPath;
             }
         }
 
